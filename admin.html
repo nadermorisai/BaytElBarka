@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم | بيت البركة</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Admin Specific Styles */
+        .admin-container {
+            max-width: 1200px;
+            margin: 120px auto 40px;
+            padding: 20px;
+        }
+
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+
+        .login-box {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-main);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .dashboard {
+            display: none;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-main);
+        }
+
+        .admin-controls {
+            display: gap;
+            gap: 10px;
+        }
+
+        .products-table-container {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            overflow-x: auto;
+            box-shadow: var(--shadow-main);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th,
+        td {
+            text-align: right;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--bg-main);
+            color: var(--primary-color);
+            position: sticky;
+            top: 0;
+        }
+
+        .product-thumb {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .status-active {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .status-hidden {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Form Grid */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-box fade-in">
+            <img src="images/logo.png" alt="logo" style="width: 80px; margin-bottom: 20px;">
+            <h2>تسجيل الدخول</h2>
+            <p style="color: #aaa; margin-bottom: 20px;">أدخل كلمة المرور للوصول للوحة التحكم</p>
+            <form id="login-form">
+                <input type="password" id="password-input" placeholder="كلمة المرور" required class="form-control"
+                    style="width: 100%; margin-bottom: 15px; padding: 12px; background: var(--bg-main); border: 1px solid var(--border-color); color: white; border-radius: 8px;">
+                <button type="submit" class="btn btn-primary full-width">دخول</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Dashboard -->
+    <div id="dashboard" class="dashboard admin-container fade-in">
+
+        <!-- Header -->
+        <header class="admin-header">
+            <div>
+                <h2>إدارة المنتجات</h2>
+                <p style="color: #aaa;">عدد المنتجات: <span id="total-count">0</span></p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn" onclick="saveChanges()" style="background: #2ecc71; color: white;">
+                    <i class="fa-solid fa-save"></i> حفظ وتنزيل التحديث
+                </button>
+                <button class="btn" onclick="openModal()">
+                    <i class="fa-solid fa-plus"></i> إضافة منتج
+                </button>
+                <button class="btn" onclick="logout()" style="background: #e74c3c; color: white;">
+                    <i class="fa-solid fa-sign-out"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Search -->
+        <!-- Navigation Tabs -->
+        <div class="admin-tabs"
+            style="display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">
+            <button class="tab-btn active" onclick="switchView('products')" id="tab-products"
+                style="background: none; border: none; color: white; padding: 10px 20px; cursor: pointer; font-size: 1.1rem; border-bottom: 3px solid transparent;">
+                <i class="fa-solid fa-box"></i> إدارة المنتجات
+            </button>
+            <button class="tab-btn" onclick="switchView('ticker')" id="tab-ticker"
+                style="background: none; border: none; color: #aaa; padding: 10px 20px; cursor: pointer; font-size: 1.1rem; border-bottom: 3px solid transparent;">
+                <i class="fa-solid fa-images"></i> إدارة الصور المتحركة
+            </button>
+        </div>
+
+        <!-- VIEW: Ticker Management -->
+        <div id="view-ticker" class="admin-view" style="display: none;">
+            <div class="admin-header" style="margin-bottom: 20px;">
+                <div>
+                    <h2>إدارة شريط الصور</h2>
+                    <p style="color: #aaa;">عدد الصور: <span id="ticker-count">0</span></p>
+                </div>
+                <button class="btn" onclick="openTickerModal()">
+                    <i class="fa-solid fa-plus"></i> إضافة صورة
+                </button>
+            </div>
+
+            <div class="products-table-container" style="margin-bottom: 40px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الصورة</th>
+                            <th>الرابط</th>
+                            <th>الحالة</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticker-table-body">
+                        <!-- Loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- VIEW: Products Management -->
+        <div id="view-products" class="admin-view">
+            <!-- Search -->
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="search-input" placeholder="بحث عن منتج..." onkeyup="filterProducts()"
+                    style="width: 100%; padding: 15px; background: var(--bg-card); border: 1px solid var(--border-color); color: white; border-radius: 10px;">
+            </div>
+
+            <!-- Table -->
+            <div class="products-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الصورة</th>
+                            <th>الاسم</th>
+                            <th>الوصف</th>
+                            <th>القسم</th>
+                            <th>السعر</th>
+                            <th>الحالة</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body">
+                        <!-- Loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div> <!-- End view-products -->
+    </div>
+
+    <!-- 3. Edit/Add Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content fade-in">
+            <span class="close-modal" onclick="closeModal()"
+                style="position: absolute; left: 20px; top: 20px; font-size: 1.5rem; cursor: pointer;">&times;</span>
+            <h2 id="modal-title" style="margin-bottom: 20px;">إضافة منتج جديد</h2>
+
+            <form id="product-form">
+                <input type="hidden" id="edit-id">
+
+                <div class="form-group">
+                    <label>اسم المنتج</label>
+                    <input type="text" id="p-name" required class="form-control"
+                        style="width: 100%; padding: 10px; background: var(--bg-main); border: 1px solid var(--border-color); color: white; border-radius: 5px;">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>السعر (مثال: 100 ج.م)</label>
+                        <input type="text" id="p-price" required
+                            style="width: 100%; padding: 10px; background: var(--bg-main); border: 1px solid var(--border-color); color: white; border-radius: 5px;">
+                    </div>
+                    <div class="form-group">
+                        <label>القسم</label>
+                        <select id="p-category" required
+                            style="width: 100%; padding: 10px; background: var(--bg-main); border: 1px solid var(--border-color); color: white; border-radius: 5px;">
+                            <option value="meat">اللحوم والدواجن</option>
+                            <option value="dairy">زيت وسمن وجبن</option>
+                            <option value="honey">عسل وطحينة</option>
+                            <option value="produce">خضار وفاكهة</option>
+                            <option value="grains">البقوليات والحبوب</option>
+                            <option value="vegan_products">منتجات صيامى</option>
+                            <option value="pickles">المخللات</option>
+                            <option value="drinks">مشروبات</option>
+                            <option value="church">مستلزمات كنائس</option>
+                            <option value="pastries">معجنات وحلويات</option>
+                            <option value="breakfast">مطبخ فطارى</option>
+                            <option value="fasting">مطبخ صيامى</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>رابط الصورة</label>
+                    <input type="text" id="p-image" required placeholder="images/example.jpg"
+                        style="width: 100%; padding: 10px; background: var(--bg-main); border: 1px solid var(--border-color); color: white; border-radius: 5px;">
+                </div>
+
+                <div class="form-group">
+                    <label>الوصف (Meta)</label>
+                    <input type="text" id="p-meta" placeholder="مثال: المصدر، الوزن..."
+                        style="width: 100%; padding: 10px; background: var(--bg-main); border: 1px solid var(--border-color); color: white; border-radius: 5px;">
+                </div>
+
+                <div class="form-group">
+                    <label>تاج القسم (يظهر فوق الاسم)</label>
+                    <input type="text" id="p-tag" required
+                        style="width: 100%; padding: 10px; background: var(--bg-main); border: 1px solid var(--border-color); color: white; border-radius: 5px;">
+                </div>
+
+                <div class="form-group" style="margin: 20px 0;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="p-hidden"> إخفاء المنتج من الموقع
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary full-width">حفظ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. Ticker Modal -->
+    <div id="ticker-modal" class="modal">
+        <div class="modal-content fade-in">
+            <span class="close-modal" onclick="closeTickerModal()"
+                style="position: absolute; left: 20px; top: 20px; font-size: 1.5rem; cursor: pointer;">&times;</span>
+            <h2 id="ticker-modal-title" style="margin-bottom: 20px;">إضافة صورة جديدة</h2>
+
+            <form id="ticker-form">
+                <input type="hidden" id="ticker-edit-id">
+
+                <div class="form-group">
+                    <label>رابط الصورة</label>
+                    <input type="text" id="t-image" required placeholder="images/ads/ad1.jpg"
+                        style="width: 100%; padding: 10px; background: var(--bg-main); border: 1px solid var(--border-color); color: white; border-radius: 5px;">
+                </div>
+
+                <div class="form-group" style="margin: 20px 0;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="t-hidden"> إخفاء الصورة من الشريط
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary full-width">حفظ</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Load SweetAlert just in case needed, or use simple alerts -->
+    <script src="js/products-data.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>

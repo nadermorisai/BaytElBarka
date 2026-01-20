@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عربة التسوق | بيت البركة</title>
+    <meta name="description" content="عربة التسوق الخاصة بك لاتمام الطلب من بيت البركة.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Layout: Table Right, Summary Left (Desktop) */
+        .cart-page-container {
+            margin-top: 220px;
+            padding-bottom: 50px;
+        }
+
+        #cart-content-area {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .cart-table-wrapper {
+            flex: 2;
+            /* Takes up 2/3 space */
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: var(--shadow-main);
+        }
+
+        .cart-summary {
+            flex: 1;
+            /* Takes up 1/3 space */
+            background: var(--card-main);
+            border-radius: 15px;
+            box-shadow: var(--shadow-main);
+            padding: 30px;
+            position: sticky;
+            top: 100px;
+            /* Sticky sidebar effect */
+            min-width: 350px;
+        }
+
+        @media (max-width: 992px) {
+            #cart-content-area {
+                flex-direction: column;
+            }
+
+            .cart-summary {
+                width: 100%;
+                min-width: auto;
+            }
+        }
+
+        /* Table Styles for Cart */
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-main);
+            min-width: 600px;
+        }
+
+        .cart-table th,
+        .cart-table td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-main);
+        }
+
+        .cart-table th {
+            background: var(--bg-secondary);
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .cart-table td {
+            vertical-align: middle;
+            color: var(--text-main);
+            font-size: 1.3rem;
+            /* Increased table font size */
+            font-weight: 600;
+        }
+
+        .cart-product-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-product-info span {
+            font-size: 1.3rem;
+            /* Increased product name size */
+            font-weight: 700;
+        }
+
+        .cart-product-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .cart-qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .remove-btn:hover {
+            color: #c0392b;
+            transform: scale(1.1);
+        }
+
+        /* Summary & Checkout Styles */
+        .cart-summary h3,
+        .checkout-form-container h3 {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary-color);
+            display: inline-block;
+            font-size: 1.5rem;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 20px;
+            font-weight: 900;
+            font-size: 2.2rem;
+            /* Doubled size as requested */
+            margin-bottom: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-main);
+            color: var(--text-main);
+        }
+
+        #grand-total-row {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            /* Massive for grand total */
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border-main);
+            background: var(--bg-main);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.2);
+        }
+
+        .checkout-form-container {
+            /* Integrated into summary now, removing separate styling if any */
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
+            margin-top: 0;
+        }
+
+        /* Toggle Options Styling */
+        .toggle-container {
+            display: flex;
+            gap: 15px;
+        }
+
+        .toggle-option {
+            flex: 1;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toggle-option input {
+            display: none;
+        }
+
+        .option-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 15px;
+            background: var(--bg-main);
+            border: 2px solid var(--border-main);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-content:hover {
+            border-color: var(--primary-color);
+            background: var(--bg-secondary);
+        }
+
+        .toggle-option input:checked+.option-content {
+            border-color: var(--primary-color);
+            background: rgba(230, 126, 34, 0.1);
+        }
+
+        .option-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--text-sub);
+            transition: color 0.3s ease;
+        }
+
+        .toggle-option input:checked+.option-content .option-icon {
+            color: var(--primary-color);
+        }
+
+        .option-text strong {
+            display: block;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .option-text span {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+        }
+
+        .check-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: var(--primary-color);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .toggle-option input:checked+.option-content .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="شعار بيت البركة" class="logo-img"> بيت البركة
+            </a>
+            <div class="nav-links">
+                <a href="index.html">الرئيسية</a>
+                <a href="products.html">المتجر</a>
+                <a href="about.html">من نحن</a>
+                <a href="contact.html">اتصل بنا</a>
+            </div>
+            <div class="nav-actions">
+                <button class="icon-btn cart-btn" aria-label="سلة التسوق">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge">0</span>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Content -->
+    <section class="container cart-page-container">
+        <h1 class="section-title">عربة <span class="highlight">التسوق</span></h1>
+
+        <div id="cart-content-area">
+            <!-- Will be populated by JS -->
+            <div class="cart-table-wrapper">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>المنتج</th>
+                            <th>السعر</th>
+                            <th>الكمية</th>
+                            <th>الإجمالي</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-table-body">
+                        <!-- Items go here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="cart-summary">
+                <div class="total-row"
+                    style="font-size: 1.1rem; border-top: none; margin-top: 10px; padding-top: 10px;">
+                    الإجمالي الفرعي: <span id="cart-subtotal">0</span> ج.م
+                </div>
+                <div class="total-row"
+                    style="font-size: 1.1rem; border-top: none; margin-top: 5px; padding-top: 5px; color: var(--text-main);">
+                    مصاريف التوصيل: <span id="delivery-fee-display">0</span> ج.م
+                </div>
+                <div class="total-row" id="grand-total-row">
+                    الإجمالي الكلي: <span id="grand-total">0</span> ج.م
+                </div>
+
+                <div class="checkout-form-container">
+                    <h3><i class="fa-solid fa-clipboard-check"></i> تفاصيل الطلب</h3>
+                    <form id="checkout-form-page" style="margin-top: 20px;">
+                        <div class="form-group">
+                            <label for="page-user-name">الاسم بالكامل</label>
+                            <input type="text" id="page-user-name" required placeholder="أدخل اسمك">
+                        </div>
+                        <div class="form-group">
+                            <label for="page-user-phone">رقم الهاتف (واتساب)</label>
+                            <input type="tel" id="page-user-phone" required placeholder="01xxxxxxxxx">
+                        </div>
+
+                        <!-- Order Type Toggle -->
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label
+                                style="display: block; margin-bottom: 10px; font-weight: bold; font-size: 1.3rem;">كيف
+                                تود استلام طلبك؟</label>
+                            <div class="toggle-container">
+                                <!-- Delivery Option -->
+                                <label class="toggle-option">
+                                    <input type="radio" name="order-type" value="delivery" checked
+                                        onchange="toggleOrderType()">
+                                    <div class="option-content">
+                                        <div class="option-icon"><i class="fa-solid fa-truck"></i></div>
+                                        <div class="option-text">
+                                            <strong>توصيل للمنزل</strong>
+                                            <span>يصلك لباب البيت</span>
+                                        </div>
+                                        <div class="check-icon"><i class="fa-solid fa-check-circle"></i></div>
+                                    </div>
+                                </label>
+
+                                <!-- Pickup Option -->
+                                <label class="toggle-option">
+                                    <input type="radio" name="order-type" value="pickup" onchange="toggleOrderType()">
+                                    <div class="option-content">
+                                        <div class="option-icon"><i class="fa-solid fa-store"></i></div>
+                                        <div class="option-text">
+                                            <strong>استلام من الفرع</strong>
+                                            <span>استلم بنفسك من المتجر</span>
+                                        </div>
+                                        <div class="check-icon"><i class="fa-solid fa-check-circle"></i></div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Payment Method Toggle -->
+                        <div class="form-group" style="margin-bottom: 25px;">
+                            <label
+                                style="display: block; margin-bottom: 10px; font-weight: bold; font-size: 1.3rem;">طريقة
+                                الدفع:</label>
+                            <div class="toggle-container">
+                                <!-- Cash Option -->
+                                <label class="toggle-option">
+                                    <input type="radio" name="payment-method" value="cash" checked>
+                                    <div class="option-content">
+                                        <div class="option-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+                                        <div class="option-text">
+                                            <strong>نقدي</strong>
+                                            <span>الدفع عند الاستلام</span>
+                                        </div>
+                                        <div class="check-icon"><i class="fa-solid fa-check-circle"></i></div>
+                                    </div>
+                                </label>
+
+                                <!-- InstaPay Option -->
+                                <label class="toggle-option">
+                                    <input type="radio" name="payment-method" value="instapay">
+                                    <div class="option-content">
+                                        <div class="option-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                                        <div class="option-text">
+                                            <strong>انستا باي</strong>
+                                            <span>InstaPay</span>
+                                        </div>
+                                        <div class="check-icon"><i class="fa-solid fa-check-circle"></i></div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Delivery Options -->
+                        <div id="delivery-options">
+                            <div class="form-group">
+                                <label for="delivery-region">المنطقة (تحديد مصاريف التوصيل)</label>
+                                <select id="delivery-region"
+                                    style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--border-main); background: var(--bg-main); color: var(--text-main); font-family: var(--font-body);">
+                                    <option value="" disabled selected>اختر المنطقة...</option>
+                                    <option value="10">غيط العنب (10 ج.م)</option>
+                                    <option value="40">محرم بك (40 ج.م)</option>
+                                    <option value="45">الشاطبى (45 ج.م)</option>
+                                    <option value="50">الابراهيمية (50 ج.م)</option>
+                                    <option value="50">سموحة (50 ج.م)</option>
+                                    <option value="50">سيدى جابر (50 ج.م)</option>
+                                    <option value="65">سيدى بشر (65 ج.م)</option>
+                                    <option value="80">المندرة (80 ج.م)</option>
+                                    <option value="70">العصافرة (70 ج.م)</option>
+                                    <option value="90">أبو قير (90 ج.م)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="page-user-address">العنوان بالتفصيل</label>
+                                <textarea id="page-user-address"
+                                    placeholder="الشارع، رقم العقار، علامة مميزة..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Pickup Options -->
+                        <div id="pickup-options" style="display: none;">
+                            <div class="form-group">
+                                <label for="pickup-time">ميعاد الاستلام</label>
+                                <input type="datetime-local" id="pickup-time"
+                                    style="width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--border-main); background: var(--bg-main); color: var(--text-main);">
+                                <small style="color: var(--text-sub); display: block; margin-top: 5px;">يرجى اختيار
+                                    الوقت الذي تود استلام طلبك فيه.</small>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn whatsapp-btn full-width"
+                            style="font-size: 1.1rem; padding: 15px;">
+                            <i class="fa-brands fa-whatsapp"></i> إتمام الطلب عبر واتساب
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="cart-empty-message" style="display: none; text-align: center; padding: 50px;">
+            <i class="fa-solid fa-cart-arrow-down"
+                style="font-size: 4rem; color: var(--text-sub); margin-bottom: 20px;"></i>
+            <h3>عربة التسوق فارغة</h3>
+            <p>لم تقم بإضافة أي منتجات بعد.</p>
+            <a href="products.html" class="btn btn-primary" style="margin-top: 20px;">تصفح المنتجات</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="images/logo.png" alt="شعار بيت البركة" class="logo-img"> بيت البركة <span
+                            class="highlight"></span>
+                    </a>
+                    <p> بيت البركة لكل بيت فى البركة.</p>
+                </div>
+
+                <div class="footer-social">
+                    <a href="https://www.facebook.com/BaytElBarka" target="_blank" aria-label="Facebook"
+                        data-tooltip="صفحة الفيس بوك"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://wtsi.me/201229649045" aria-label="whatsapp" data-tooltip="تواصل معنا"><i
+                            class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://chat.whatsapp.com/JwdQ167tA44AwSHWCEbN8V" aria-label="whatsapp"
+                        data-tooltip="جروب واتس اب"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://whatsapp.com/channel/0029Va9jiv59WtCCh6FfTQ3H" aria-label="whatsapp"
+                        data-tooltip="قناة الواتس اب"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 بيت البركة. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script -->
+    <script src="js/script.js"></script>
+</body>
+
+</html>

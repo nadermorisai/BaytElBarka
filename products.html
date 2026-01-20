@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المتجر | بيت البركة</title>
+    <meta name="description" content="تسوق منتجاتنا الفاخرة من الطعام، أدوات المطبخ، والسلع المنزلية.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="شعار بيت البركة" class="logo-img"> بيت البركة
+            </a>
+            <div class="nav-links">
+                <a href="index.html">الرئيسية</a>
+                <a href="products.html" class="active">المتجر</a>
+                <a href="about.html">من نحن</a>
+                <a href="contact.html">اتصل بنا</a>
+            </div>
+            <div class="nav-actions">
+                <button class="icon-btn cart-btn" aria-label="سلة التسوق">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge">0</span>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Products Section -->
+    <section id="products" class="section bg-alt" style="margin-top: 220px;">
+        <div class="container">
+            <h2 class="section-title fade-in-on-scroll">منتجات <span class="highlight">مميزة</span></h2>
+
+            <div class="filters fade-in-on-scroll">
+                <button class="filter-btn active" data-filter="all">الكل</button>
+                <button class="filter-btn" data-filter="breakfast">مطبخ فطارى</button>
+                <button class="filter-btn" data-filter="fasting">مطبخ صيامى</button>
+                <button class="filter-btn" data-filter="pastries">معجنات وحلويات</button>
+                <button class="filter-btn" data-filter="meat">اللحوم والدواجن</button>
+                <button class="filter-btn" data-filter="dairy">زيت وسمن وجبن</button>
+                <button class="filter-btn" data-filter="honey">عسل وطحينة</button>
+                <button class="filter-btn" data-filter="produce">خضار وفاكهة</button>
+                <button class="filter-btn" data-filter="grains">البقوليات والحبوب</button>
+                <button class="filter-btn" data-filter="vegan_products">منتجات صيامى</button>
+                <button class="filter-btn" data-filter="pickles">المخللات</button>
+                <button class="filter-btn" data-filter="drinks">مشروبات</button>
+                <button class="filter-btn" data-filter="church">مستلزمات كنائس</button>
+            </div>
+
+            <!-- Dynamic Grids (Populated by JS) -->
+
+            <!-- Meat -->
+            <section id="meat-section" class="category-section">
+                <h2 class="section-title">لحوم <span class="highlight">ودواجن</span></h2>
+                <div class="products-grid" id="meat-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Dairy -->
+            <section id="dairy-section" class="category-section">
+                <h2 class="section-title">الأجبان <span class="highlight">والألبان</span></h2>
+                <div class="products-grid" id="dairy-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Honey -->
+            <section id="honey-section" class="category-section">
+                <h2 class="section-title">عسل <span class="highlight">وطحينة</span></h2>
+                <div class="products-grid" id="honey-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Produce -->
+            <section id="produce-section" class="category-section">
+                <h2 class="section-title">الخضروات <span class="highlight">والفاكهة</span></h2>
+                <div class="products-grid" id="produce-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Grains -->
+            <section id="grains-section" class="category-section">
+                <h2 class="section-title">بقوليات <span class="highlight">وعطارة</span></h2>
+                <div class="products-grid" id="grains-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Vegan Products (Note ID Change to match category) -->
+            <section id="vegan-section" class="category-section">
+                <h2 class="section-title">منتجات <span class="highlight">صيامي</span></h2>
+                <div class="products-grid" id="vegan_products-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Pickles -->
+            <section id="pickles-section" class="category-section">
+                <h2 class="section-title">المخللات <span class="highlight">والمشهيات</span></h2>
+                <div class="products-grid" id="pickles-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Drinks -->
+            <section id="drinks-section" class="category-section">
+                <h2 class="section-title">مشروبات <span class="highlight">وعصائر</span></h2>
+                <div class="products-grid" id="drinks-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Church -->
+            <section id="church-section" class="category-section">
+                <h2 class="section-title">احتياجات <span class="highlight">الكنيسة</span></h2>
+                <div class="products-grid" id="church-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Pastries -->
+            <section id="pastries-section" class="category-section">
+                <h2 class="section-title">معجنات <span class="highlight">وحلويات</span></h2>
+                <div class="products-grid" id="pastries-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Breakfast Kitchen -->
+            <section id="breakfast-section" class="category-section">
+                <h2 class="section-title">مطبخ <span class="highlight">فطارى</span></h2>
+                <div class="products-grid" id="breakfast-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Fasting Kitchen -->
+            <section id="fasting-section" class="category-section">
+                <h2 class="section-title">مطبخ <span class="highlight">صيامى</span></h2>
+                <div class="products-grid" id="fasting-products-grid">
+                    <!-- Loaded dynamically -->
+                </div>
+            </section>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="images/logo.png" alt="شعار بيت البركة" class="logo-img"> بيت البركة <span
+                            class="highlight"></span>
+                    </a>
+                    <p> بيت البركة لكل بيت فى البركة.</p>
+                </div>
+
+                <div class="footer-social">
+                    <a href="https://www.facebook.com/BaytElBarka" target="_blank" aria-label="Facebook"
+                        data-tooltip="صفحة الفيس بوك"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://wtsi.me/201229649045" aria-label="whatsapp" data-tooltip="تواصل معنا"><i
+                            class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://chat.whatsapp.com/JwdQ167tA44AwSHWCEbN8V" aria-label="whatsapp"
+                        data-tooltip="جروب واتس اب"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://whatsapp.com/channel/0029Va9jiv59WtCCh6FfTQ3H" aria-label="whatsapp"
+                        data-tooltip="قناة الواتس اب"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 بيت البركة. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeCheckout()">&times;</span>
+            <div class="cart-header">
+                <h2><i class="fa-solid fa-truck-fast"></i> إتمام الطلب</h2>
+            </div>
+            <form id="checkout-form">
+                <div class="form-group">
+                    <label for="user-name">الاسم بالكامل</label>
+                    <input type="text" id="user-name" required placeholder="أدخل اسمك">
+                </div>
+                <div class="form-group">
+                    <label for="user-phone">رقم الهاتف (واتساب)</label>
+                    <input type="tel" id="user-phone" required placeholder="01xxxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label for="user-address">العنوان بالتفصيل</label>
+                    <textarea id="user-address" required placeholder="المنطقة، الشارع، رقم العقار..."></textarea>
+                </div>
+                <button type="submit" class="btn whatsapp-btn full-width">
+                    <i class="fa-brands fa-whatsapp"></i> أرسل الطلب عبر واتساب
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/products-data.js"></script> <!-- Data File -->
+    <script src="js/products-renderer.js"></script> <!-- Renderer -->
+    <script src="js/script.js"></script> <!-- Main Interactions -->
+</body>
+
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اتصل بنا | بيت البركة</title>
+    <meta name="description" content="تواصل معنا في بيت البركة لأي استفسارات أو طلبات.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="شعار بيت البركة" class="logo-img"> بيت البركة
+            </a>
+            <div class="nav-links">
+                <a href="index.html">الرئيسية</a>
+                <a href="products.html">المتجر</a>
+                <a href="about.html">من نحن</a>
+                <a href="contact.html" class="active">اتصل بنا</a>
+            </div>
+            <div class="nav-actions">
+                <button class="icon-btn cart-btn" aria-label="سلة التسوق">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge">0</span>
+                </button>
+                <div class="mobile-menu-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section bg-alt" style="margin-top: 220px;">
+        <div class="container contact-wrapper">
+            <div class="contact-info fade-in-on-scroll">
+                <h2 class="section-title">تواصل <span class="highlight">معنا</span></h2>
+                <p>هل لديك أسئلة حول منتجاتناأو تحتاج إلى طلب خاص؟.</p>
+
+                <div class="info-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div>
+                        <h4>زرنا</h4>
+                        <p> غيط العنب . الاسكندرية</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <div>
+                        <h4>اتصل بنا</h4>
+                        <p>+20 1229649045</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <i class="fa-solid fa-envelope"></i>
+                    <div>
+                        <h4>راسلنا</h4>
+                        <p>home.el.barka@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <form id="contact-form" class="contact-form fade-in-on-scroll delay-100">
+                <div class="form-group">
+                    <input type="text" name="name" id="contact-name" placeholder="اسمك" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="phone" id="contact-phone" placeholder="رقم الواتساب" required>
+                </div>
+                <div class="form-group">
+                    <select name="subject" id="contact-subject">
+                        <option value="General Inquiry">استفسار عام</option>
+                        <option value="Order Support">دعم الطلبات</option>
+                        <option value="Wholesale">الجملة</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea name="message" id="contact-message" rows="5" placeholder="رسالتك" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">أرسل الرسالة</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="images/logo.png" alt="شعار بيت البركة" class="logo-img"> بيت البركة <span
+                            class="highlight"></span>
+                    </a>
+                    <p> بيت البركة لكل بيت فى البركة.</p>
+                </div>
+
+                <div class="footer-social">
+                    <a href="https://www.facebook.com/BaytElBarka" target="_blank" aria-label="Facebook"
+                        data-tooltip="صفحة الفيس بوك"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://wtsi.me/201229649045" aria-label="whatsapp" data-tooltip="تواصل معنا"><i
+                            class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://chat.whatsapp.com/JwdQ167tA44AwSHWCEbN8V" aria-label="whatsapp"
+                        data-tooltip="جروب واتس اب"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://whatsapp.com/channel/0029Va9jiv59WtCCh6FfTQ3H" aria-label="whatsapp"
+                        data-tooltip="قناة الواتس اب"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 بيت البركة. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script -->
+    <script src="js/script.js"></script>
+</body>
+
+</html>
