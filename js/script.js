@@ -87,23 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileBtn && navLinks) {
         mobileBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
-
-            // Inline style fix for visibility if CSS is missing
-            if (navLinks.classList.contains('active')) {
-                Object.assign(navLinks.style, {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    position: 'absolute',
-                    top: '70px',
-                    left: '0',
-                    width: '100%',
-                    background: 'var(--bg-main)',
-                    padding: '20px',
-                    boxShadow: 'var(--shadow-main)'
-                });
-            } else {
-                navLinks.style.display = '';
-            }
         });
     }
 
